@@ -3,7 +3,7 @@ Produto final do Curso de Estatística Computacional (Poli-UPE). Através da inv
 
 # 1. Introdução
 
-Mobilidade urbana é um dos temas centrais do desenvolvimento das cidades. O ciclismo se apresenta como interessante alternativa para a mobilidade em razão dos diversos benefícios coletivos e individuais à saúde e ao meio ambiente. Cidades mais limpas, menos barulhentas e com mais espaços livres trazem maior qualidade de vidaaos cidadãos que ali residem e/ou trabalham.
+Mobilidade urbana é um dos temas centrais do desenvolvimento das cidades. O ciclismo se apresenta como interessante alternativa para a mobilidade em razão dos diversos benefícios coletivos e individuais à saúde e ao meio ambiente. Cidades mais limpas, menos barulhentas e com mais espaços livres trazem maior qualidade de vida aos cidadãos que ali residem e/ou trabalham.
 
 Uma das alternativas, além do estímulo ao uso de bicicletas particulares é a oferta de serviços de aluguel. A gestão deste serviço envolve um complexo de fatores que, quando bem administrado, pode trazer maior aproveitamento pelo público beneficiário, além da redução dos custos para manutenção do serviço.
 
