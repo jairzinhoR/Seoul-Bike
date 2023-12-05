@@ -52,6 +52,41 @@ View(base)
 
 A partir da função str( ), pudemos verificar as variáveis que necessitariam ser configuradas para a leitura correta.
 
-<img src="https://github.com/jairzinhoR/Seoul-Bike/assets/96251048/d5d7c73e-43ea-4354-882a-3a3e69ac45ff" width="300">
+<img src="https://github.com/jairzinhoR/Seoul-Bike/assets/96251048/ffd15d9e-052f-4998-8769-153f6137b878" width="700">
+
+Assim, realizamos os comandos abaixo:
+
+```
+# AJUSTE DOS TIPOS DAS VARIÁVEIS
+base$DATA = as.Date(base$DATA, format = "%d-%m-%Y")
+base$TEMPERATURA = as.numeric(base$TEMPERATURA)
+base$VELOC_VENTO = as.numeric(base$VELOC_VENTO)
+base$TEMP_ORVALHO = as.numeric(base$TEMP_ORVALHO)
+base$RAD_SOLAR = as.numeric(base$RAD_SOLAR)
+base$CHUVA = as.numeric(base$CHUVA)
+base$NEVE = as.numeric(base$NEVE)
+```
+
+# 5. Estatística descritiva
+Para a realização da estatística descritiva, verificamos a amplitude (valores mínimoemáximo), quartis, média e mediana. Utilizamos os seguintes comandos:
 
 
+```
+# ESTATÍSTICA DESCRITIVA DA BASE I - MÍNIMO, MÁXIMO, QUARTIS, MÉDIA E MEDIANA
+summary(base$BIC_ALUGADAS)
+summary(base$TEMPERATURA)
+summary(base$UMIDADE)
+summary(base$VELOC_VENTO)
+summary(base$VISIBILIDADE)
+summary(base$TEMP_ORVALHO)
+summary(base$RAD_SOLAR)
+summary(base$NEVE)
+summary(base$CHUVA)
+summary(base$HORA)
+```
+
+<img src="https://github.com/jairzinhoR/Seoul-Bike/assets/96251048/fb4abeea-e9d2-4e65-8fa4-ed468558cbea" width="500">   
+   
+Já é possível tirarmos algumas impressões de nossa base. O primeiro dado que pode ser destacado diz respeito a constante utilização do serviço de aluguel de bicicletas. A variável BIC_ALUGADAS apresenta 2 (dois) como valor mínimo. Isso quer dizer que não houve uma única hora, em 365 dias no ano, nem mesmo durante as madrugadas, onde pelo menos 2 (duas) bicicletas não foram locadas. Outros dados que corroboram com estas impressões são o de mediana e média, que apresentam altos valores e correspondem, respectivamente, a 542 e 729 bicicletas alugas por hora. Para visualizarmos mais um dado sobre essa alta rotatividade de bicicletas alugadas, lançamos a função sum( ) e obtivemos o resultado de 6.172.314 bicicletas alugadas no ano.   
+   
+<img src="https://github.com/jairzinhoR/Seoul-Bike/assets/96251048/412b521a-306b-4fa2-985e-c9bf4822c8b7" width="300">
