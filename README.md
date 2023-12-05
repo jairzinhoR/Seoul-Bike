@@ -218,13 +218,13 @@ Já o gráfico da variável TEMPERATURA DO PONTO DE ORVALHO apresenta uma distri
 
 Não há nada para comentar sobre o boxplot da variável HORA do dia. Os valores foram registrados continuamente das 0 horas às 23 horas e, por isso, a disposição do gráfico apresenta perfeita simetria. De todo modo, a sua visualização se fez importante para constatarmos a ocorrência uniforme desses registros.
 
-# Método de Monte Carlo, particionamento dos dados e criação do modelo de regressão
+# 9. Método de Monte Carlo, particionamento dos dados e criação do modelo de regressão
 
 Dado o tamanho de nossa base, utilizaremos a técnica denominada cross-validation para particionamento dos dados em treinamento e teste e, posteriormente, avaliação de cada um de nossos modelos.
 
 Vamos construir três modelos e depois compará-los. Os três terão como variável alvo BIC_ALUGADAS. O modelo 1 terá como variável independente aquela que apresentou correlação mais forte. O modelo 2 terá como variáveis independentes as duas que apresentaram maior correlação. E o modelo 3 irá abranger todas as demais variáveis de nossa base de dados. Apresento o esquema abaixo para facilitar oentendimento. Logo em seguida, apresento o script dos três modelos.
 
-Modelo 1:
+### Modelo 1:
 Variável alvo (BIC_ALUGADAS)
 Variável independente (TEMPERATURA)
 
@@ -289,7 +289,7 @@ mean(MAE)
 mean(RMSE)
 ```
 
-Modelo 2:
+### Modelo 2:
 Variável alvo (BIC_ALUGADAS)
 Variáveis independentes (TEMPERATURA e HORA)
 
@@ -352,7 +352,7 @@ mean(MAE2)
 mean(RMSE2)
 ```
 
-Modelo 3:
+### Modelo 3:
 Variável alvo (BIC_ALUGADAS)
 Variáveis independentes (TEMPERATURA, HORA, TEMP_ORVALHOUMIDADE, VELOC_VENTO, VISIBILIDADE, RAD_SOLAR, CHUVA, NEVE)
 
@@ -419,8 +419,29 @@ mean(RMSE3)
 
 Vamos agora comparar as médias de erros do modelo ajustado, erro absoluto e erromédio quadrático.
 
-
-
+### Modelo 1
+> mean(MA)   
+[1] 0.3174221   
+> mean(MAE)   
+[1] 393.0512   
+> mean(RMSE)   
+[1] 530.8339   
+### Modelo 2   
+> mean(MA2)   
+[1] 0.3971569   
+> mean(MAE2)   
+[1] 366.4671   
+> mean(RMSE2)   
+[1] 498.9069   
+### Modelo 3   
+> mean(MA3)   
+[1] 0.512048   
+> mean(MAE3)   
+[1] 334.7368   
+> mean(RMSE3)   
+[1] 448.8965   
+   
+Ainda não é possível tirarmos conclusões. O índice do modelo ajustado 1 apresentaomenor valor. Por outro lado, o modelo 3 apresenta o menor erro absoluto. Apartir deoutras verificações poderemos chegar a uma conclusão sobre qual seria o melhor modelo. O test-t será fundamental para essa escolha.
 
 
 
