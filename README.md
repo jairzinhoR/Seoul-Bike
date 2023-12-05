@@ -85,8 +85,8 @@ summary(base$CHUVA)
 summary(base$HORA)
 ```
 
-<img src="https://github.com/jairzinhoR/Seoul-Bike/assets/96251048/fb4abeea-e9d2-4e65-8fa4-ed468558cbea" width="500">   
+<img src="https://github.com/jairzinhoR/Seoul-Bike/assets/96251048/fb4abeea-e9d2-4e65-8fa4-ed468558cbea" width="450">   
    
 Já é possível tirarmos algumas impressões de nossa base. O primeiro dado que pode ser destacado diz respeito a constante utilização do serviço de aluguel de bicicletas. A variável BIC_ALUGADAS apresenta 2 (dois) como valor mínimo. Isso quer dizer que não houve uma única hora, em 365 dias no ano, nem mesmo durante as madrugadas, onde pelo menos 2 (duas) bicicletas não foram locadas. Outros dados que corroboram com estas impressões são o de mediana e média, que apresentam altos valores e correspondem, respectivamente, a 542 e 729 bicicletas alugas por hora. Para visualizarmos mais um dado sobre essa alta rotatividade de bicicletas alugadas, lançamos a função sum( ) e obtivemos o resultado de 6.172.314 bicicletas alugadas no ano.   
    
-<img src="https://github.com/jairzinhoR/Seoul-Bike/assets/96251048/412b521a-306b-4fa2-985e-c9bf4822c8b7" width="300">
+<img src="https://github.com/jairzinhoR/Seoul-Bike/assets/96251048/412b521a-306b-4fa2-985e-c9bf4822c8b7" width="220">
