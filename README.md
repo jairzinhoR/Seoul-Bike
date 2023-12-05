@@ -52,6 +52,6 @@ View(base)
 
 A partir da função str( ), pudemos verificar as variáveis que necessitariam ser configuradas para a leitura correta.
 
-![image](https://github.com/jairzinhoR/Seoul-Bike/assets/96251048/83541ab2-8dd2-4e8f-be7b-d6491bf1db63)
+<img src="https://github.com/jairzinhoR/Seoul-Bike/assets/96251048/d5d7c73e-43ea-4354-882a-3a3e69ac45ff" width="300">
 
 
