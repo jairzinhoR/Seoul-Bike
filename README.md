@@ -68,7 +68,7 @@ base$NEVE = as.numeric(base$NEVE)
 ```
 
 # 5. Estatística descritiva
-Para a realização da estatística descritiva, verificamos a amplitude (valores mínimoemáximo), quartis, média e mediana. Utilizamos os seguintes comandos:
+Para a realização da estatística descritiva, verificamos a amplitude (valores mínimo e máximo), quartis, média e mediana. Utilizamos os seguintes comandos:
 
 
 ```
