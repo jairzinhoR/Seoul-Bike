@@ -164,7 +164,7 @@ plot(base$DATA, base$CHUVA, col = "blue", main = "Chuvas ao longo do ano em(mm)"
 
 As chuvas, por outro lado, estão presentes em praticamente todo o ano, mas em quantidade menor nos meses de dezembro até final de fevereiro. O que é esperado, considerando que estes são os meses das mais baixas temperaturas e queda de neve.
 
-# 6. Correlação de todas as variáveis numéricas
+# 7. Correlação de todas as variáveis numéricas
 
 Para realizarmos a correlação da base inteira precisamos excluir as colunas contendo variáveis nominais. Fizemos isso através dos comandos abaixo e salvamos a base em outra variável, com o fim de podermos acessar as variáveis nominais novamente na última etapa da pesquisa, para o teste de ANOVA.
 
@@ -190,4 +190,238 @@ A HORA é a segunda variável de correlação mais intensa, mas ainda assim cons
 <img src="https://github.com/jairzinhoR/Seoul-Bike/assets/96251048/7948afc5-0d10-47a1-aa1c-833d41d2fd58" width="999">
 
 Nestes dez dias onde houve a maior demanda de bicicletas também percebemos temperaturas que variaram entre 24,1ºC e 27,8ºC, índices bem acima da média e mediana da cidade. Estas informações corroboram com o fato da variável TEMPERATURA apresentar a correlação mais forte e, por isso, será a mais importante para a construção do nosso modelo.
+
+# 8. Gráficos boxplot das demais variáveis numéricas
+
+Como já apresentamos gráficos boxplot da temperatura e umidade do ar no item 6 deste relatório, vamos aqui verificar como se dispõe os gráficos boxplot das demais variáveis numéricas de nossa base.
+
+```
+# GRÁFICO BOXPLOT DAS DEMAIS VARIÁVEIS NUMÉRICA
+boxplot(baseNum$BIC_ALUGADAS, labels = T, main = "Qtd de bicicletas
+alugadas por hora")
+boxplot(baseNum$VELOC_VENTO, labels = T, main = "Velocidade do vento emm/s")
+boxplot(baseNum$VISIBILIDADE, labels = T, main = "Visibilidade (10m)")
+boxplot(baseNum$TEMP_ORVALHO, labels = T, main = "Temperatura de pontode orvalho em ºC")
+boxplot(baseNum$RAD_SOLAR, labels = T, main = "Umidade do ar em%")
+boxplot(baseNum$CHUVA, labels = T, main = "Chuva em mm")
+boxplot(baseNum$NEVE, labels = T, main = "Neve em mm")
+boxplot(baseNum$HORA, labels = T, main = "Horas consideradas no estudo")
+```
+<img src="https://github.com/jairzinhoR/Seoul-Bike/assets/96251048/40a9e9ad-66ad-4b0d-a7f0-6bcbf7302f75" width="600">
+<img src="https://github.com/jairzinhoR/Seoul-Bike/assets/96251048/26d0a033-7230-4b2e-9d9d-c927a7d2fdc2" width="600">
+<img src="https://github.com/jairzinhoR/Seoul-Bike/assets/96251048/b3269b19-c0a0-4cad-8ac6-4ff68483de2c" width="600">
+<img src="https://github.com/jairzinhoR/Seoul-Bike/assets/96251048/98a2c225-85d1-4057-89cc-7441538a8cb1" width="600">
+
+Podemos identificar outliers em vários gráficos aqui: no de bicicletas alugadas por hora, velocidade do vento, chuva, radiação solar e neve. Como já discutido, estas são variáveis que apresentam dados com distribuição desigual. Apenas para ilustrar e relembrar, a neve se concentra em apenas três meses do ano. O índice 0 (zero) de neve que se estende ao longo de todo ano puxa os quartis e a mediana para baixo. Por isso, a caixa está achatada e a grande quantidade de outliers acima do ponto limite.
+
+Já o gráfico da variável TEMPERATURA DO PONTO DE ORVALHO apresenta uma distribuição semelhante ao da TEMPERATURA. Isso é esperado, já que estas duas métricas guardam grande correlação. Caso você retorne para a tabela de correlação, verá que as duas possuem uma correlação muito forte: 0,91.
+
+Não há nada para comentar sobre o boxplot da variável HORA do dia. Os valores foram registrados continuamente das 0 horas às 23 horas e, por isso, a disposição do gráfico apresenta perfeita simetria. De todo modo, a sua visualização se fez importante para constatarmos a ocorrência uniforme desses registros.
+
+# Método de Monte Carlo, particionamento dos dados e criação do modelo de regressão
+
+Dado o tamanho de nossa base, utilizaremos a técnica denominada cross-validation para particionamento dos dados em treinamento e teste e, posteriormente, avaliação de cada um de nossos modelos.
+
+Vamos construir três modelos e depois compará-los. Os três terão como variável alvo BIC_ALUGADAS. O modelo 1 terá como variável independente aquela que apresentou correlação mais forte. O modelo 2 terá como variáveis independentes as duas que apresentaram maior correlação. E o modelo 3 irá abranger todas as demais variáveis de nossa base de dados. Apresento o esquema abaixo para facilitar oentendimento. Logo em seguida, apresento o script dos três modelos.
+
+Modelo 1:
+Variável alvo (BIC_ALUGADAS)
+Variável independente (TEMPERATURA)
+
+```
+# MODELO 1 - QUANTIDADE DE BICICLETAS ALUGADAS POR HORA, CONSIDERANDO A VARIÁVEL TEMPERATURA
+ModeloAjustado1 = c(0)
+ErroAbsoluto1 = c(0)
+ErroMedioQuadratico1 = c(0)
+library(caret)
+n = dim(baseNum)[1]
+MC= 30
+MA=NULL
+MAE=NULL
+RMSE=NULL
+# inicio do LOOP de MONTE CARLO
+for (a in 1:MC){
+folds = createFolds(baseNum$BIC_ALUGADAS, k = 10, list = T, returnTrain =F)
+for (i in 1:10){
+#Obtencao do Vetor Aleatorio para escolha
+if (i == 1){
+vetor = folds$Fold01
+}else if (i == 2){
+vetor = folds$Fold02
+}else if (i == 3){
+vetor = folds$Fold03
+}else if (i == 4){
+vetor = folds$Fold04
+}else if (i == 4){
+vetor = folds$Fold04
+}else if (i == 5){
+vetor = folds$Fold05
+}else if (i == 6){
+vetor = folds$Fold06
+}else if (i == 7){
+vetor = folds$Fold07
+}else if (i == 8){
+vetor = folds$Fold08
+}else if (i == 9){
+vetor = folds$Fold09
+}else{
+vetor = folds$Fold10
+}
+# Dividindo em Treino e Teste
+test.data = baseNum[vetor,]
+train.data = baseNum[-vetor,]
+# Construção do Modelo de Regressão
+modelo1 =lm(BIC_ALUGADAS ~ TEMPERATURA, data = train.data)
+# Calculo do Valor predito
+ValoresPreditos1 = predict(modelo1,newdata=data.frame(test.data))
+# Métricas para Avaliar o modelo
+ModeloAjustado1 [i] = R2(ValoresPreditos1, test.data$BIC_ALUGADAS)
+ErroAbsoluto1 [i] = MAE(ValoresPreditos1, test.data$BIC_ALUGADAS)
+ErroMedioQuadratico1 [i] = RMSE(ValoresPreditos1, test.data$BIC_ALUGADAS)
+}
+MA [a] = mean(ModeloAjustado1)
+MAE [a] = mean(ErroAbsoluto1)
+RMSE [a] = mean(ErroMedioQuadratico1)
+}
+#Média final dos erros após o MC
+mean(MA)
+mean(MAE)
+mean(RMSE)
+```
+
+Modelo 2:
+Variável alvo (BIC_ALUGADAS)
+Variáveis independentes (TEMPERATURA e HORA)
+
+```
+# MODELO 2 - QUANTIDADE DE BICICLETAS ALUGADAS POR HORA, CONSIDERANDO AS VARIÁVEIS TEMPERATURA E HORA DO DIAModeloAjustado2 = c(0)
+ErroAbsoluto2 = c(0)
+ErroMedioQuadratico2 = c(0)
+n = dim(baseNum)[1]
+MC= 30
+MA2=NULL
+MAE2=NULL
+RMSE2=NULL
+# inicio do LOOP de MONTE CARLO
+for (a in 1:MC){
+folds = createFolds(baseNum$BIC_ALUGADAS, k = 10, list = T, returnTrain =F)
+for (i in 1:10){
+#Obtencao do Vetor Aleatorio para escolha
+if (i == 1){
+vetor = folds$Fold01
+}else if (i == 2){
+vetor = folds$Fold02
+}else if (i == 3){
+vetor = folds$Fold03
+}else if (i == 4){
+vetor = folds$Fold04
+}else if (i == 4){
+vetor = folds$Fold04
+}else if (i == 5){
+vetor = folds$Fold05
+}else if (i == 6){
+vetor = folds$Fold06
+}else if (i == 7){
+vetor = folds$Fold07
+}else if (i == 8){
+vetor = folds$Fold08
+}else if (i == 9){
+vetor = folds$Fold09
+}else{
+vetor = folds$Fold10
+}
+#Dividindo em Treino e Teste
+test.data = baseNum[vetor,]
+train.data = baseNum[-vetor,]
+# Construção do Modelo de Regressão
+modelo2 =lm(BIC_ALUGADAS ~ TEMPERATURA+HORA, data = train.data)
+# Calculo do Valor predito
+ValoresPreditos2 = predict(modelo2,newdata=data.frame(test.data))
+#Métricas para Avaliar o modelo
+ModeloAjustado2 [i] = R2(ValoresPreditos2, test.data$BIC_ALUGADAS)
+ErroAbsoluto2 [i] = MAE(ValoresPreditos2, test.data$BIC_ALUGADAS)
+ErroMedioQuadratico2 [i] = RMSE(ValoresPreditos2, test.data$BIC_ALUGADAS)
+}
+MA2 [a] = mean(ModeloAjustado2)
+MAE2 [a] = mean(ErroAbsoluto2)
+RMSE2 [a] = mean(ErroMedioQuadratico2)
+}
+# Média final dos erros após o MC
+mean(MA2)
+mean(MAE2)
+mean(RMSE2)
+```
+
+Modelo 3:
+Variável alvo (BIC_ALUGADAS)
+Variáveis independentes (TEMPERATURA, HORA, TEMP_ORVALHOUMIDADE, VELOC_VENTO, VISIBILIDADE, RAD_SOLAR, CHUVA, NEVE)
+
+```
+# MODELO 3 - QUANTIDADE DE BICICLETAS ALUGADAS POR HORA, CONSIDERANDO TODAS AS VARIÁVEIS
+ModeloAjustado3 = c(0)
+ErroAbsoluto3 = c(0)
+ErroMedioQuadratico3 = c(0)
+n = dim(baseNum)[1]
+MC= 30
+MA3=NULL
+MAE3=NULL
+RMSE3=NULL
+#inicio do LOOP de MONTE CARLO
+for (a in 1:MC){
+folds = createFolds(baseNum$BIC_ALUGADAS, k = 10, list = T, returnTrain =F)
+for (i in 1:10){
+#Obtencao do Vetor Aleatorio para escolha
+if (i == 1){
+vetor = folds$Fold01
+}else if (i == 2){
+vetor = folds$Fold02
+}else if (i == 3){
+vetor = folds$Fold03
+}else if (i == 4){
+vetor = folds$Fold04
+}else if (i == 4){
+vetor = folds$Fold04
+}else if (i == 5){
+vetor = folds$Fold05
+}else if (i == 6){
+vetor = folds$Fold06
+}else if (i == 7){
+vetor = folds$Fold07
+}else if (i == 8){
+vetor = folds$Fold08
+}else if (i == 9){
+vetor = folds$Fold09
+}else{
+vetor = folds$Fold10
+}
+#Dividindo em Treino e Teste
+test.data = baseNum[vetor,]
+train.data = baseNum[-vetor,]
+# Construção do Modelo de Regressão
+modelo3 =lm(BIC_ALUGADAS ~ TEMPERATURA+HORA+TEMP_ORVALHO+UMIDADE+VELOC_VENTO+VI
+SIBILIDADE+RAD_SOLAR+CHUVA+NEVE, data = train.data)
+# Calculo do Valor predito
+ValoresPreditos3 = predict(modelo3,newdata=data.frame(test.data))
+#Métricas para Avaliar o modelo
+ModeloAjustado3 [i] = R2(ValoresPreditos3, test.data$BIC_ALUGADAS)
+ErroAbsoluto3 [i] = MAE(ValoresPreditos3, test.data$BIC_ALUGADAS)
+ErroMedioQuadratico3 [i] = RMSE(ValoresPreditos3, test.data$BIC_ALUGADAS)
+}
+MA3 [a] = mean(ModeloAjustado3)
+MAE3 [a] = mean(ErroAbsoluto3)
+RMSE3 [a] = mean(ErroMedioQuadratico3)
+}
+#Média final dos erros após o MC
+mean(MA3)
+mean(MAE3)
+mean(RMSE3)
+```
+
+Vamos agora comparar as médias de erros do modelo ajustado, erro absoluto e erromédio quadrático.
+
+
+
+
+
+
 
