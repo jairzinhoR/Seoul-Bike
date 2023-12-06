@@ -224,7 +224,7 @@ Dado o tamanho de nossa base, utilizaremos a técnica denominada cross-validatio
 
 Vamos construir três modelos e depois compará-los. Os três terão como variável alvo BIC_ALUGADAS. O modelo 1 terá como variável independente aquela que apresentou correlação mais forte. O modelo 2 terá como variáveis independentes as duas que apresentaram maior correlação. E o modelo 3 irá abranger todas as demais variáveis de nossa base de dados. Apresento o esquema abaixo para facilitar o entendimento. Logo em seguida, apresento o script dos três modelos.
 
-### Criação do Modelo 1:
+### Criação do Modelo 1
 Variável alvo (BIC_ALUGADAS)
 Variável independente (TEMPERATURA)
 
@@ -289,7 +289,7 @@ mean(MAE)
 mean(RMSE)
 ```
 
-### Criação do Modelo 2:
+### Criação do Modelo 2
 Variável alvo (BIC_ALUGADAS)
 Variáveis independentes (TEMPERATURA e HORA)
 
@@ -353,7 +353,7 @@ mean(MAE2)
 mean(RMSE2)
 ```
 
-### Criação do Modelo 3:
+### Criação do Modelo 3
 Variável alvo (BIC_ALUGADAS)
 Variáveis independentes (TEMPERATURA, HORA, TEMP_ORVALHOUMIDADE, VELOC_VENTO, VISIBILIDADE, RAD_SOLAR, CHUVA, NEVE)
 
@@ -509,3 +509,58 @@ Resultado:
 
 Os testes de Shapiro-Wilk retornou p-value superior a 0,05 para os três vetores deerros dos três modelos em análise. Assim, podemos constatar a normalidade dos três. Agora, temos condições de realizarmos o Teste-T para uma definição sobre qual modelo seria mais interessante.
 
+## 11.3 Teste-T
+
+```
+# TESTE-T
+t.test(ErroAbsoluto1,ErroAbsoluto2, alternative = c("less"))
+t.test(ErroAbsoluto2,ErroAbsoluto3, alternative = c("less"))
+t.test(ErroAbsoluto3,ErroAbsoluto2, alternative = c("less"))
+```
+
+<img src="https://github.com/jairzinhoR/Seoul-Bike/assets/96251048/0305a64e-a191-4d3f-8510-f8e9ac63c5fb" width="605">
+
+Vamos admitir o intervalo de confiança de 95%, tal como convencionado e sugerido pela função “t.test( )”. Comparamos os erros absolutos dos modelos 1 e 2, supondo que o modelo 1, aquele que apresentava apenas a variável temperatura, seria melhor que o modelo 2. No entanto, o p-value apresentou o resultado “1”. Valor este superior ao admitido (0,05) e delimitado pelo nosso intervalo de confiança. Neste caso, aceitamos a hipótese nula e nada podemos dizer sobre qual seria o modelo com menos erros.
+
+Em razão do resultado do primeiro teste, avançamos para o segundo, para saber se o modelo 2 seria melhor do que o modelo 3. No entanto, o valor do resultado do p-value também foi “1”. Mais uma vez, devemos aceitar a hipótese nula e nada podemos dizer sobre qual seria o melhor modelo.
+
+Por fim, realizamos o teste para verificarmos se o modelo 3 seria melhor que omodelo 2. Nesse caso, o valor de p foi bastante inferior a 0,05, tendo como resultado 5.788e-07. Neste caso, rejeitamos a hipótese nula e admitimos a hipótese alternativa. Assim, o modelo que relaciona a variável alvo (BIC_ALUGADAS) com todas as demais variáveis da base foi o modelo que apresentou o melhor desempenho.
+
+# 12. Teste de ANOVA
+
+O teste de ANOVA é uma técnica estatística para realizar comparações entre três ou mais grupos em amostras independentes. Para realizarmos esse teste, vamos realizar
+novo carregamento da base de dados sem nenhum tipo de pré-processamento. O objetivo aqui é o de resgatar duas variáveis categóricas: 1) estações do ano (Seasons)
+e 2) feriados (Holiday); para verificarmos se existe diferença entre a quantidade debicicletas alugadas (Rented.Bike.Count), considerando estações do ano e feriados. Dito de outro modo, pensando nas nossas hipóteses nula e alternativa:
+
+* H0: Não existe diferença na quantidade de bicicletas alugadas emrazão das estações do ano.
+* H1: Há diferença na quantidade de bicicletas alugadas em pelo menos uma estação do ano.
+* H0: Não existe diferença na quantidade de bicicletas alugadas emrazão dos feriados.
+* H1:Há diferença na quantidade de bicicletas alugadas em pelo menos um dos feriados.
+
+```
+#ANOVA
+baseANOVA = read.csv2("SeoulBikeData.csv", header = TRUE, sep = ",", stringsAsFactors = FALSE)
+View(baseANOVA)
+dados_anova = aov(baseANOVA$Rented.Bike.Count ~
+baseANOVA$Seasons+baseANOVA$Holiday)
+dados_anova
+summary(dados_anova)
+```
+
+Resultado:
+
+<img src="https://github.com/jairzinhoR/Seoul-Bike/assets/96251048/95350465-2779-479a-9949-636b4aa02b06" width="600">
+
+Diferentemente do Teste-T, no teste de ANOVA não formulamos a hipótese. O objetivo aqui é constatarmos se há variabilidade na relação entre as variáveis independentes sobre a variável alvo. Também diferente do Teste-T, não definimos o intervalo de confiança e a nossa principal referência para análise é o valor de “F” em comparação com os diferentes intervalos de confiança indicados pelos símbolos de asterisco ou ponto.
+
+Conforme resultado, em ambos os casos, rejeitamos a hipótese nula e acolhemos a hipótese alternativa. Há relação e variação na quantidade de bicicletas alugadas tanto em decorrência de, pelo menos, uma estações do ano, como em decorrência de, pelo menos, um feriado. Os valores de F ficaram abaixo do mínimo estipulado pelo intervalo de confiança. “Estação do Ano”, com intervalo de confiança de 99,99%, obteve F-value de 2e-16 e “Feriado”, com intervalo de confiança de 95%, obteve F- value de 0,0154.
+
+# 13. Considerações finais
+
+Constatamos moderada correlação da variável temperatura com o quantitativo de aluguel de bicicletas. No entanto, ela por si não foi suficiente para criação de um modelo de inferência confiável. Agregando outras variáveis, dados meteorológicos e a variável “HORA” do dia, fomos capazes de encontrar um modelo de regressão capaz de prever a flutuação da demanda do sistema de compartilhamento de bicicletas.
+
+Como sugestão para futuros trabalhos sobre o assunto, recomendamos verificar o possível aumento da acurácia de novos modelos ao tratar de forma específica as diferentes horas do dia e seu impacto na quantidade de bicicletas alugadas. Ao verificar a correlação entre BIC_ALUGADAS e TEMPERATURA, considerando apenas o mesmo intervalo de hora (das 17h às 18h), houve um aumento significativo da correlação (de 0,56 para 0,72). Este é um indicativo de que pode ser interessante tratar as horas do dia de forma individualizada ou específica. Assim, sugerimos a construção de modelos específicos para cada intervalo de hora ou a instrução para que um mesmo modelo trate as horas do dia de forma pareada. Por exemplo, é mais inteligente analisar comparativamente o quantitativo de bicicletas alugadas sempre as 18h de diferente dias úteis, do que comparar essa mesma hora com todos os intervalos de tempo possíveis, como madrugdas e feriados. Essa sugestão apenas tem o intuitode ampliar a capacidade do(s) modelo(s) em entender as especificidades que envolvem o negócio.
+
+Considerando a recomendação anterior, também sugerimos a ampliação da base dedados, uma vez que cada intervalo de hora dispõe apenas de 365 ocorrências. Dados sobre os usuários também podem agregar muito valor para o entendimento sobre a flutuação da demanda ao longo do ano, assim como informações georeferenciadas sobre a circulação dessas bicicletas e suas demandas em diferentes pontos da cidade.
+
+Por fim, cabe destacar que este estudo pode subsidiar outros trabalhos sobre sistemas de compartilhamento de bicicletas. Seul é a maior metrópole da Coréia do Sul e possui uma população de quase dez milhões de habitantes. Recife, por exemplo, dispõe de apenas 1,55 milhão de habitantes. O conhecimento da complexidade que envolve o sistema de bicicletas estudado e as características meteorológicas de Seul podem subsidiar novos trabalhos atentos às similitudes e diferenças de outros sistemas e localidades, de modo a identificar e potencializar oportunidades e reduzir e/ou evitar riscos do negócio.
