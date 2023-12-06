@@ -216,13 +216,13 @@ Podemos identificar outliers em vários gráficos aqui: no de bicicletas alugada
 
 Já o gráfico da variável TEMPERATURA DO PONTO DE ORVALHO apresenta uma distribuição semelhante ao da TEMPERATURA. Isso é esperado, já que estas duas métricas guardam grande correlação. Caso você retorne para a tabela de correlação, verá que as duas possuem uma correlação muito forte: 0,91.
 
-Não há nada para comentar sobre o boxplot da variável HORA do dia. Os valores foram registrados continuamente das 0 horas às 23 horas e, por isso, a disposição do gráfico apresenta perfeita simetria. De todo modo, a sua visualização se fez importante para constatarmos a ocorrência uniforme desses registros.
+Não há nada para comentar sobre o boxplot da variável HORA do dia. Os valores foram registrados continuamente das 0 horas às 23 horas e, por isso, a disposição do gráfico apresenta perfeita simetria. A sua visualização se fez importante apenas para constatarmos a ocorrência uniforme dos registros.
 
 # 9. Método de Monte Carlo, particionamento dos dados e criação do modelo de regressão
 
 Dado o tamanho de nossa base, utilizaremos a técnica denominada cross-validation para particionamento dos dados em treinamento e teste e, posteriormente, avaliação de cada um de nossos modelos.
 
-Vamos construir três modelos e depois compará-los. Os três terão como variável alvo BIC_ALUGADAS. O modelo 1 terá como variável independente aquela que apresentou correlação mais forte. O modelo 2 terá como variáveis independentes as duas que apresentaram maior correlação. E o modelo 3 irá abranger todas as demais variáveis de nossa base de dados. Apresento o esquema abaixo para facilitar oentendimento. Logo em seguida, apresento o script dos três modelos.
+Vamos construir três modelos e depois compará-los. Os três terão como variável alvo BIC_ALUGADAS. O modelo 1 terá como variável independente aquela que apresentou correlação mais forte. O modelo 2 terá como variáveis independentes as duas que apresentaram maior correlação. E o modelo 3 irá abranger todas as demais variáveis de nossa base de dados. Apresento o esquema abaixo para facilitar o entendimento. Logo em seguida, apresento o script dos três modelos.
 
 ### Modelo 1:
 Variável alvo (BIC_ALUGADAS)
@@ -294,7 +294,8 @@ Variável alvo (BIC_ALUGADAS)
 Variáveis independentes (TEMPERATURA e HORA)
 
 ```
-# MODELO 2 - QUANTIDADE DE BICICLETAS ALUGADAS POR HORA, CONSIDERANDO AS VARIÁVEIS TEMPERATURA E HORA DO DIAModeloAjustado2 = c(0)
+# MODELO 2 - QUANTIDADE DE BICICLETAS ALUGADAS POR HORA, CONSIDERANDO AS VARIÁVEIS TEMPERATURA E HORA DO DIA
+ModeloAjustado2 = c(0)
 ErroAbsoluto2 = c(0)
 ErroMedioQuadratico2 = c(0)
 n = dim(baseNum)[1]
@@ -417,7 +418,7 @@ mean(MAE3)
 mean(RMSE3)
 ```
 
-Vamos agora comparar as médias de erros do modelo ajustado, erro absoluto e erromédio quadrático.
+Vamos agora comparar as médias de erros do modelo ajustado, erro absoluto e erro médio quadrático.
 
 ### Modelo 1
 > mean(MA)   
@@ -441,8 +442,70 @@ Vamos agora comparar as médias de erros do modelo ajustado, erro absoluto e err
 > mean(RMSE3)   
 [1] 448.8965   
    
-Ainda não é possível tirarmos conclusões. O índice do modelo ajustado 1 apresentaomenor valor. Por outro lado, o modelo 3 apresenta o menor erro absoluto. Apartir deoutras verificações poderemos chegar a uma conclusão sobre qual seria o melhor modelo. O test-t será fundamental para essa escolha.
+Ainda não é possível tirarmos conclusões. O índice do modelo ajustado 1 apresenta o menor valor. Por outro lado, o modelo 3 apresenta o menor erro absoluto. A partir de outras verificações poderemos chegar a uma conclusão sobre qual seria o melhor modelo. O test-t será fundamental para essa escolha.
 
+# 10. Equação de regressão
 
+Antes de seguirmos para a análise comparativa dos erros dos modelos, vamos entender melhor a equação de regressão, tomando como referência o nosso modelo1. Abaixo, apresento os coeficientes do teste de regressão:
 
+<img src="https://github.com/jairzinhoR/Seoul-Bike/assets/96251048/12f6205c-b0ae-49b2-a4f1-53610e1e55cd" width="555">
+
+O modelo de regressão pode ser expressado a partir da seguinte equação:
+
+<img src="https://github.com/jairzinhoR/Seoul-Bike/assets/96251048/3fd65b9b-6f57-43f6-98fb-31d898f2872e" width="255">
+
+Onde “a” seria o intercepto e b seria a inclinação da reta de regressão. Substituindo a e b pelos seus respectivos coeficientes temos:
+
+Y = 348,98 + 29,83X
+
+Desta forma, podemos dizer que a cada aumento de 1 grau de temperatura em graus celsius, teríamos o aumento de aproximadamente 30 bicicletas alugadas por hora.
+
+Assim, podemos realizar a predição de um valor de bicicletas alugadas estimando uma dada temperatura hipotética. Por exemplo, 31,7 ºC é uma temperatura que não consta em nenhuma das 8.465 ocorrências registradas em nossa base de dados. Existem valores mais altos e mais baixos. Mas caso a temperatura alcance este índice em situações futuras e considerando a equação de regressão, qual seria a quantidadede bicicletas alugadas no intervalo de uma hora?
+
+Para essa resposta, utilizamos os comandos abaixo e a já mencionada equação:
+
+```
+# PREDIÇÃO DE BICICLETAS ALUGADAS A PARTIR DA VARIAÇÃO DE TEMPERATURA
+modelo1
+a = 348.28
+b = 29.87
+x = 31.7
+Y = a + (b*x)
+Y
+```
+RESULTADO:
+<img src="https://github.com/jairzinhoR/Seoul-Bike/assets/96251048/7e29aaea-0837-4524-abea-056d0762a627" width="205">
+
+Como resultado temos uma estimativa de 1.295 bicicletas alugadas no intervalo de uma hora para a temperatura de 37,1ºC. Estas são estimativas interessantes de serem realizadas porque a gestão eficiente do sistema envolveria, por exemplo, a preparação e disponibilização de uma quantidade maior de bicicletas nos períodos de temperaturas mais altas.
+
+# 11. Análise comparativa dos vetores de erros dos modelos de regressão
+
+## 11.1 Verificação da normalidade na distribuição dos erros
+
+Primeiro, é importante verificarmos o histograma dos erros.
+
+```
+# VERIFICAÇÃO DE POSSÍVEL NORMALIDADE POR MEIO DOS GRÁFICOS
+hist(ErroAbsoluto1)
+hist(ErroAbsoluto2)
+hist(ErroAbsoluto3)
+```
+<img src="https://github.com/jairzinhoR/Seoul-Bike/assets/96251048/35b7b638-6f46-4c94-8078-732ce52f3380" width="705">
+
+Não é possível constatar a normalidade da distribuição dos erros apenas através da visualização dos histogramas acima. Assim, faz-se importante realizarmos o teste de Shapiro-wilk.
+
+## Teste de Shapiro-Wilk
+
+```
+# VERIFICAÇÃO DA NORMALIDADE DOS ERROS A PARTIR DO TESTE DE SHAPIRO
+shapiro.test(ErroAbsoluto1)
+shapiro.test(ErroAbsoluto2)
+shapiro.test(ErroAbsoluto3)
+```
+
+Resultado:
+
+<img src="https://github.com/jairzinhoR/Seoul-Bike/assets/96251048/ceae23b0-72cb-4a3f-94b6-0c330c1a5e78" width="505">
+
+Os testes de Shapiro-Wilk retornou p-value superior a 0,05 para os três vetores deerros dos três modelos em análise. Assim, podemos constatar a normalidade dos três. Agora, temos condições de realizarmos o Teste-T para uma definição sobre qual modelo seria mais interessante.
 
