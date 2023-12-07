@@ -224,7 +224,7 @@ Dado o tamanho de nossa base, utilizaremos a técnica denominada cross-validatio
 
 Vamos construir três modelos e depois compará-los. Os três terão como variável alvo BIC_ALUGADAS. O modelo 1 terá como variável independente aquela que apresentou correlação mais forte. O modelo 2 terá como variáveis independentes as duas que apresentaram maior correlação. E o modelo 3 irá abranger todas as demais variáveis de nossa base de dados. Apresento o esquema abaixo para facilitar o entendimento. Logo em seguida, apresento o script dos três modelos.
 
-### Criação do Modelo 1
+### 9.1 Criação do Modelo 1
 Variável alvo (BIC_ALUGADAS)
 Variável independente (TEMPERATURA)
 
@@ -289,7 +289,7 @@ mean(MAE)
 mean(RMSE)
 ```
 
-### Criação do Modelo 2
+### 9.2 Criação do Modelo 2
 Variável alvo (BIC_ALUGADAS)
 Variáveis independentes (TEMPERATURA e HORA)
 
@@ -353,7 +353,7 @@ mean(MAE2)
 mean(RMSE2)
 ```
 
-### Criação do Modelo 3
+### 9.3 Criação do Modelo 3
 Variável alvo (BIC_ALUGADAS)
 Variáveis independentes (TEMPERATURA, HORA, TEMP_ORVALHOUMIDADE, VELOC_VENTO, VISIBILIDADE, RAD_SOLAR, CHUVA, NEVE)
 
@@ -420,21 +420,21 @@ mean(RMSE3)
 
 Vamos agora comparar as médias de erros do modelo ajustado, erro absoluto e erro médio quadrático.
 
-### Erros do Modelo 1
+### 9.4 Erros do Modelo 1
 > mean(MA)   
 [1] 0.3174221   
 > mean(MAE)   
 [1] 393.0512   
 > mean(RMSE)   
 [1] 530.8339   
-### Erros do Modelo 2   
+### 9.5 Erros do Modelo 2   
 > mean(MA2)   
 [1] 0.3971569   
 > mean(MAE2)   
 [1] 366.4671   
 > mean(RMSE2)   
 [1] 498.9069   
-### Erros do Modelo 3   
+### 9.6 Erros do Modelo 3   
 > mean(MA3)   
 [1] 0.512048   
 > mean(MAE3)   
