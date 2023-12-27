@@ -1,6 +1,8 @@
 # Projeto Seoul-Bike
 Projeto do Curso de Estatística Computacional (Poli-UPE). Através da investigação da base de dados “Seoul Bike Sharing Data Set” - Machine Learning UCI, buscamos identificar correlações e fazer previsões que permitam melhor conhecimento deste negócio e, assim, o seu melhor aproveitamento. 
 
+Tecnologias utilizadas: Python, Google Colab, R, RStudio.
+
 # 1. Introdução
 Mobilidade urbana é um dos temas centrais do desenvolvimento das cidades. O ciclismo se apresenta como interessante alternativa para a mobilidade em razão dos diversos benefícios coletivos e individuais à saúde e ao meio ambiente. Cidades mais limpas, menos barulhentas e com mais espaços livres trazem maior qualidade de vida aos cidadãos que ali residem e/ou trabalham.
 
